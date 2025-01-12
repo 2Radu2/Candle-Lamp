@@ -1,0 +1,52 @@
+//pin assignments
+const int thermistorPin = A1;  
+const int microphonePin = A0;  
+const int relayPin = 3;        
+
+//sensor values
+int thermistorValue = 0;
+int previousThermistorValue = 0;  
+int microphoneValue = 0;
+int state = 0; 
+bool lockThermistor = false; 
+
+void setup() {
+  pinMode(relayPin, OUTPUT);  
+  Serial.begin(9600);          
+  digitalWrite(relayPin, LOW); // Start with the relay (LED) off
+  previousThermistorValue = analogRead(thermistorPin); 
+}
+
+void loop() {
+  microphoneValue = analogRead(microphonePin);
+  thermistorValue = analogRead(thermistorPin);
+
+  if ((thermistorValue > 110 || thermistorValue < 85) && state == 0 && !lockThermistor) {
+    // Turn on LED (relay closed)
+    digitalWrite(relayPin, HIGH);
+    Serial.println("Candle Lit");
+    state = 1; 
+  }
+
+  if ((microphoneValue > 930 || microphoneValue < 870) && state == 1) {
+    // Turn off LED (relay open)
+    digitalWrite(relayPin, LOW);
+    Serial.println("Candle Turned Off");
+    state = 0;        
+    lockThermistor = true;  
+    previousThermistorValue = thermistorValue; 
+  }
+
+  // **Reset Thermistor Lock**: Detect a temperature greater than 50 units to unlock thermistor control
+  if (lockThermistor && (thermistorValue > previousThermistorValue + 50)) {
+    lockThermistor = false;  
+    Serial.println("Significant temperature rise detected, thermistor unlocked.");
+  }
+
+
+  Serial.print("Thermistor Value: ");
+  Serial.print(thermistorValue);
+  Serial.print(" | Microphone Value: ");
+  Serial.println(microphoneValue);
+  delay(500);  
+}
