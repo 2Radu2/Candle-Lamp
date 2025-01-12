@@ -6,6 +6,7 @@ Heat Detection: An NTC thermistor detects heat, triggering the relay to turn the
 Blow Detection: A microphone detects a blow (or a significant change in input) and triggers the relay to turn the lamp off.
 Continuous Functionality: The system allows for multiple on/off toggles while connected to the power supply, ensuring it replicates the natural behavior of a candle.
 Components:
+
 SAV MAKER I Board
 5V Relay with Socket (for reuse)
 NPN Bipolar Transistor (2N3904)
@@ -15,7 +16,9 @@ Electret Microphone (unamplified)
 Pre-drilled PCB
 Two-way terminal block for lamp connection
 Long-pin headers for easy connectivity
+
 Features:
+
 Heat detection to simulate lighting the "candle."
 Sound detection to simulate blowing out the "candle."
 Works with both a small LED for testing and a real 220V lamp for practical use.
